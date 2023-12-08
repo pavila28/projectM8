@@ -1,7 +1,10 @@
 const asyncHandler = require('express-async-handler')
+const Product = require('../model/productModel')
 
 const getProduct = asyncHandler ( async (req, res) => {
-    res.status(200).json({ message: 'Obtener productos' })
+    const products = await Product.find()
+
+    res.status(200).json({ products })
 })
 
 const createProduct = asyncHandler ( async (req, res) => {
@@ -10,7 +13,13 @@ const createProduct = asyncHandler ( async (req, res) => {
         throw new Error('Por favor teclea el nombre del producto')
     }
 
-    res.status(201).json({ message: 'Producto creado' })
+    const product = await Product.create({
+        nombre: req.body.nombre,
+        precio: req.body.precio,
+        descripcion: req.body.descripcion
+    })
+
+    res.status(201).json({ product })
 })
 
 const updateProduct = asyncHandler ( async (req, res) => {
