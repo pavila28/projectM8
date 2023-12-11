@@ -13,6 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/productos', require('./routes/productsRoutes'))
+app.use('/api/users', require('./routes/usersRoutes'))
 
 app.use(errorHandler)
 
