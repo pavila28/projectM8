@@ -44,12 +44,36 @@ const createUser = asyncHandler ( async (req, res) => {
 })
 
 const loginUser = asyncHandler ( async (req, res) => {
-    res.status(201).json({ message: 'Usuario logeado' })
+    //se desestructura el body
+    const { email, password } = req.body
+
+    //se verifica que exista el usuario
+    const user = await User.findOne({ email })
+
+    //verificamos usuario y contraseña
+    if(user && (await bcrypt.compare(password, user.password))){
+        res.status(200).json({
+            _id: user.id,
+            name: user.nombre,
+            email: user.email,
+            token: generarToken(user.id)
+        })
+    } else {
+        res.status(400)
+        throw new Error('Credenciales incorrectas')
+    }
 })
 
 const dataUser = asyncHandler ( async (req, res) => {
-    res.status(201).json({ message: 'Datos del usuario' })
+    res.status(201).json(req.user)
 })
+
+//funcion para generar un JWT
+const generarToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+}
 
 module.exports = {
     createUser,
