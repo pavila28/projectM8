@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Product = require('../model/productModel')
-const { findByIdAndDelete } = require('../model/productModel')
+//const { findByIdAndDelete } = require('../model/productModel')
 
 const getProduct = asyncHandler ( async (req, res) => {
     const products = await Product.find({ user: req.user.id })
